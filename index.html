@@ -234,7 +234,7 @@ function participantMotion(t){
 }
 function animateAthlete(progress,time){
  const q=participantMotion(progress);
- athlete.visible=E('showAvatar').checked&&!!q&&!(playing&&mode==='person');if(!q)return;
+ athlete.visible=E('showAvatar').checked&&!!q&&!(mode==='person'&&(playing||(avatarActive&&!avatarFollow)));if(!q)return;
  const {phase,move}=q;
  const hanging=move==='suspension'||move==='balancement',swimming=move==='nage',dive=move==='plongeon',exit=move==='sortie';
  const gripBlend=hanging?(q.transitionIn?smooth01(phase*2.7):1):q.transitionOut?1-smooth01(phase*3):0;
@@ -257,7 +257,7 @@ function animateAthlete(progress,time){
  limbPivots.leftArm.rotation.x=(1-gripBlend)*((1-swimBlend)*(dive?-2.2:vault?-1.4:flight?-.55:armsLeft)+swimBlend*stroke*1.15);
  limbPivots.rightArm.rotation.x=(1-gripBlend)*((1-swimBlend)*(dive?-2.2:vault?-1.4:flight?-.55:armsRight)-swimBlend*stroke*1.15);
  const underwaterDive=dive? smooth01((phase-.25)/.58):0;
- athlete.rotation.x=swimming?-1.18:exit?-1.18*(1-smooth01(phase*.95)):dive?underwaterDive*.95:0;
+ athlete.rotation.x=swimming?-1.18:exit?-1.18*(1-smooth01(phase)):dive?underwaterDive*.95:0;
  if(avatarFollow&&!(playing&&mode==='person')){
   const desired=athlete.position.clone().add(new T.Vector3(-q.d.x*8,4,-q.d.z*8));
   camera.position.lerp(desired,.09);
